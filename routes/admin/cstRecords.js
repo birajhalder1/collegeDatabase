@@ -1,0 +1,114 @@
+const express = require("express");
+const router = express.Router();
+const passport = require("passport");
+//Load model
+const cstRecords = require("../../models/Cst");
+
+// @route   GET api/cstRecords/test
+// @desc    Tests cst student route
+// @access  Private
+router.get("/test", (req, res) => res.json({ msg: " CST Students Works" }));
+
+// @route   POST api/cstRecords/cstInfo
+// @desc    mStudentinfo route
+// @access  Private
+router.post(
+  "/cstInfo",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const student = {
+      name: req.body.name,
+      fname: req.body.fname,
+      add: req.body.add,
+      phone: req.body.phone,
+      registration: req.body.registration,
+      roll: req.body.roll,
+      dept: req.body.dept,
+      semester: req.body.semester
+    };
+    const newStudent = new cstRecords(student);
+    newStudent.save().then(result => res.json("Student information are saved"));
+  }
+);
+
+// @route   POST api/cstRecords/name
+// @desc    Search cstRecords name
+// @access  Private
+router.get(
+  "/:name",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    let name = req.params.name;
+    cstRecords.findOne({ name }).then(name => {
+      if (name) {
+        // Search name
+        return res.status(404).json(name);
+      } else {
+        return res.status(400).json(" Name not found in the database !");
+      }
+    });
+  }
+);
+
+// @route   POST api/cstRecords
+// @desc    Search cstRecords name all
+// @access  Private
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    cstRecords.find().then(name => res.json(name));
+  }
+);
+
+// @route   POST api/cstRecords/search/:id
+// @desc    Search cstRecords id
+// @access  Private
+router.get(
+  "/search/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    let id = req.params.id;
+    cstRecords.findOne({ _id: id }).then(result => res.json(result));
+  }
+);
+
+// @route   POST api/cstRecords/update
+// @desc    Update cstRecords info
+// @access  Private
+router.post(
+  "/update/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    let id = req.params.id;
+    const data = {
+      name: req.body.name,
+      fname: req.body.fname,
+      add: req.body.add,
+      phone: req.body.phone,
+      registration: req.body.registration,
+      roll: req.body.roll,
+      dept: req.body.dept,
+      semester: req.body.semester
+    };
+    cstRecords
+      .findByIdAndUpdate({ _id: id }, { $set: data }, { new: true })
+      .then(update => res.json(update));
+  }
+);
+
+// @route   POST api/cstRecords/delete/:id
+// @desc    Delete cstRecords info
+// @access  Private
+router.delete(
+  "/delete/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    let id = req.params.id;
+    cstRecords
+      .deleteOne({ _id: id })
+      .then(del => res.json({ msg: " Delete successfully !" }));
+  }
+);
+
+module.exports = router;
