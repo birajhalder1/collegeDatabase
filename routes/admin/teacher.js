@@ -4,7 +4,7 @@ const passport = require("passport");
 //Load model
 const teacher = require("../../models/Teacher");
 
-// @route   GET api/teacher/test
+// @route   GET admin/teacher/test
 // @desc    Tests cst student route
 // @access  Private
 router.get("/test", (req, res) => res.json({ msg: " Teacher Works" }));
@@ -14,8 +14,9 @@ router.get("/test", (req, res) => res.json({ msg: " Teacher Works" }));
 // @access  Private
 router.post(
   "/teacherInfo",
-  passport.authenticate("jwt", { session: false }),
+  //passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    //console.log("inside backend");
     const data = {
       name: req.body.name,
       add: req.body.add,
@@ -52,19 +53,20 @@ router.get(
 // @access  Private
 router.get(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  //passport.authenticate("jwt", { session: false }),
   (req, res) => {
     teacher.find().then(name => res.json(name));
   }
 );
 
-// @route   POST api/teacher/id
+// @route   POST admin/teacher/id
 // @desc    Search teacher id
 // @access  Private
 router.get(
-  "/search/:id",
-  passport.authenticate("jwt", { session: false }),
+  "/getSingle/:id",
+  //passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    //console.log("hitted");
     let id = req.params.id;
     teacher.findOne({ _id: id }).then(result => res.json(result));
   }
@@ -75,7 +77,7 @@ router.get(
 // @access  Private
 router.post(
   "/update/:id",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
   (req, res) => {
     let id = req.params.id;
     const data = {

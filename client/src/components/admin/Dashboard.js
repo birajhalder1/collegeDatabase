@@ -56,11 +56,7 @@ export default function Dashboard() {
           <Paper className={classes.paper}>
             <List>
               <Grid container justify="center" alignItems="center">
-                <Avatar
-                  alt="Remy Sharp"
-                  src="/components/image/biraj.jpg"
-                  className={classes.bigAvatar}
-                />
+                <Avatar alt="Remy Sharp" className={classes.bigAvatar} />
                 <Typography variant="h5">Biraj Halder</Typography>
               </Grid>
 
@@ -226,7 +222,7 @@ export default function Dashboard() {
 
         {/* Numbers of records shown */}
         <Grid item xs={12} sm={9}>
-          <Paper className={classes.paper}>Dashboard</Paper>
+          <Paper className={classes.paper}></Paper>
         </Grid>
       </Grid>
     </div>
